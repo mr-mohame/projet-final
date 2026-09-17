@@ -31,44 +31,102 @@ function normaliserNom(nom){
 
 // fonction pour valide le reseaultat 
 function validerResultat(jour, exercicesTermines, totalExercices){
-    let jour = parseInt(prompt("enter saisir le jour  (1-7): "));
-    let totalExercices = parseInt(prompt("enter le total d'exercices: "));
-    let exercicesTermines = parseInt(prompt("enter combien d'exercices terminés: "));
-    
-    while(jour<1 || jour>7 || isNaN(jour)){
-        jour = parseInt(prompt("Erreur : enter saisir le jour  (1-7): "));
-        
+    if(jour<1 || jour>7){
+        return false
     }
-    while(exercicesTermines<0 || exercicesTermines> totalExercices || isNaN(exercicesTermines)){
-    totalExercices = parseInt(prompt("Erreur : enter le total d'exercices: "));
+    if(exercicesTermines<0 || totalExercices<=0){
+        return false
     }
-    return {
-        resultats: [
-            { jour: jour, 
-            exercicesTermines: exercicesTermines,
-            totalExercices: totalExercices
-            }
-        ]
-
-    };
-}    
-
+    if(exercicesTermines>totalExercices){
+        return false
+    }
+    return true
+} 
+  
 // fonction ajouter 
 function ajouterapprenants(id, nom, ville){
     id = parseInt(prompt("Entre l'id :"));
+     for(let i=0; i<apprenants.length; i++){
+        while(apprenants[i].id===id || isNaN(id)){
+            id= parseInt(prompt("erreur : entre un other id : "));
+        }
+    }
     nom = prompt("Entre le nom complet :");
     ville = prompt("Entre la ville :");
 
-    return{
-        id ,
+    let nouvelApprenant ={
+        id: id,
         nomComplet: normaliserNom(nom),
         ville:normaliserNom(ville) ,
         resultats:[]
     }
+    apprenants.push(nouvelApprenant);
+    return nouvelApprenant
+    
+
+}
+function enregistrerResultat(id, jour, exercicesTermines, totalExercices){
+    // verification d'id
+    let apprenantTrouve;
+    for(let i=0; i<apprenants.length; i++){
+        if(apprenants[i].id === id){
+            apprenantTrouve = apprenants[i]
+            break;
+        }
+    }
+    if(apprenantTrouve==null){
+        console.log("apprenant non Trouve");
+    }
+    // verification de jour
+    let verifieJour= validerResultat(jour, exercicesTermines, totalExercices);
+    if(!verifieJour){
+        console.log("les donne sont valide");
+        return
+        
+    }
+    let reseaultatJour = null;
+    for(let i=0; i<apprenantTrouve.resultats.length; i++){
+        if(apprenantTrouve.resultats[i].jour==jour){
+            reseaultatJour=apprenantTrouve.resultats[i];
+            break;
+
+        }
+    }
+    if(reseaultatJour!==null){
+       reseaultatJour.exercicesTermines = exercicesTermines;
+       reseaultatJour.totalExercices= totalExercices;
+       console.log("mise a jour avec succes ")
+    }else{
+        apprenants.resultats.push({
+            jour : jour,
+            exercicesTermines : exercicesTermines,
+            totalExercices : totalExercices,
+            challengeTermine: challengeTermine
+        })
+        console.log("jour ajoute");
+    }
+
+}
+
+ 
+function calculerProgression(apprenant){
+    let totalExercices =0;
+    let totalProposes = 0
+    let challengecount =0
+    let joursRs= apprenant.resultats.length;
+
+    for(let i=0; i<joursRs; i++){
+        let res = apprenant.resultats[i];
+        totalExercices += res.exercicesTermines
+        totalProposes += res.totalExercices;
+        totalProposes += res.totalExercices;
+        if(res.challengeTermine){
+            challengecount ++;
+        }
+    }
 
 
 }
- 
 
 
 // function pour affiche le menu 
