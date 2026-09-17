@@ -124,6 +124,18 @@ function calculerProgression(apprenant){
             challengecount ++;
         }
     }
+    let progress;
+    if(totalExercices==0){
+        progress=0;
+    }
+    progress= (totalExercices / totalProposes)*100;// 56.65677899 56.56
+    progress=Number(progress.toFixed(2))
+    return{
+        exercicesTermines : exercicesTermines,
+        totalProposes : totalProposes,
+        challengeTermine : challengeTermine,
+        joursRs : joursRs
+    }
 
 
 }
