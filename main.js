@@ -23,9 +23,8 @@ totalExercices: 20, challengeTermine: false }
 ];
 // fonction pour normaliser le nom 
 function normaliserNom(nom){
-    nom = nom.toLowerCase();
-    nom =nom.trim(); 
-    return nom;
+    if(!nom) return "";
+    return nom.trim().toLowerCase();
 
 }
 
@@ -78,16 +77,16 @@ function ajouterapprenants(id, nom, ville){
 
 //function pour enregistrer les resultat
 
-function enregistrerResultat(id, jour, exercicesTermines, totalExercices){
+function enregistrerResultat(id, jour, exercicesTermines, totalExercices, challengeTermine){
     // verification d'id
     let apprenantTrouve;
     for(let i=0; i<apprenants.length; i++){
-        if(apprenants[i].id === id){
+        if(apprenants[i].id === parseInt(id)){
             apprenantTrouve = apprenants[i]
             break;
         }
     }
-    if(apprenantTrouve==null){
+    if(!apprenantTrouve){
         console.log("apprenant non Trouve");
         return
     }
@@ -98,21 +97,21 @@ function enregistrerResultat(id, jour, exercicesTermines, totalExercices){
         return
         
     }
-    let reseaultatJour = null;
+    let resultatJour = null;
     for(let i=0; i<apprenantTrouve.resultats.length; i++){
-        if(apprenantTrouve.resultats[i].jour==jour){
-            reseaultatJour=apprenantTrouve.resultats[i];
+        if(apprenantTrouve.resultats[i].jour == jour){
+            resultatJour=apprenantTrouve.resultats[i];
             break;
 
         }
     }
-    if(reseaultatJour!==null){
-       reseaultatJour.exercicesTermines = exercicesTermines;
-       reseaultatJour.totalExercices= totalExercices
+    if(resultatJour!==null){
+       resultatJour.exercicesTermines = exercicesTermines;
+       resultatJour.totalExercices= totalExercices
        resultatJour.challengeTermine = challengeTermine;
        console.log("mise a jour avec succes ")
     }else{
-        apprenants.resultats.push({
+        apprenantTrouve.resultats.push({
             jour : jour,
             exercicesTermines : exercicesTermines,
             totalExercices : totalExercices,
@@ -125,7 +124,7 @@ function enregistrerResultat(id, jour, exercicesTermines, totalExercices){
  // function pour calcule la pourcentage de chaque apprenant.
 function calculerProgression(apprenant){
     let totalExercices =0;
-    let totalProposes = 0
+    let totalProposes = 0;
     let joursRs= apprenant.resultats.length;
 
     for(let i=0; i<joursRs; i++){
@@ -143,11 +142,11 @@ function calculerProgression(apprenant){
 
     let statut ="";
     if(pourcentage>=80){
-        statu ="Excellent";
+        statut ="Excellent";
     }else if(pourcentage>=50 && pourcentage<80){
-        statu ="Moyen";
+        statut ="Moyen";
     }else if(pourcentage<50){
-        statu ="Insuffisant";
+        statut ="Insuffisant";
     }
     return{
         pourcentage : pourcentage,
@@ -159,7 +158,7 @@ function calculerProgression(apprenant){
 function rechercherApprenant(recherche){
     let apprenantRecherche= null;
     for(let i=0; i<apprenants.length; i++){
-        if(apprenants[i].id===recherche || apprenants[i].nomComplet=== normaliserNom(recherche)){
+        if(apprenants[i].id===parseInt(recherche) || apprenants[i].nomComplet.includes(normaliserNom(recherche))){
             apprenantRecherche = apprenants[i]
             break;
         }
@@ -184,6 +183,23 @@ function rechercherApprenant(recherche){
     console.log(`Pourcentage: ${prog.pourcentage}%`);
     console.log(`statut : ${prog.statut}`);
 }
+// fonction pour filter les apprenant par niveau
+function filtrerParNiveau(niveauRecherche){
+    let niveauNom = normaliserNom(niveauRecherche);
+    let trouve = 0;
+    for(let i=0; i<apprenants.length; i++){
+        let appreant = apprenants[i];
+        let statut = calculerProgression|(appreant);
+        if(normaliserNom(statut.statut)=== niveauNom){
+            console.log(`id: ${appreant.id} | nom: ${appreant.nomComplet} | villa: ${appreant.ville} || progression: ${statut.pourcentage}% | statut: ${statut.statut}`);
+            trouve++;
+        }
+    }
+    if(trouve===0){
+        console.log("aucun apprenant trouve pour ce niveau");
+    }
+
+}
 
 
 // function pour affiche le menu 
@@ -207,24 +223,36 @@ do{
             break;
         case 2:
             console.log("- Liste des apprenants");
-            break
+            for(let i=0; i<apprenants.length; i++){
+                console.log(`${apprenants[i].id}. ${apprenants[i].nomComplet}. ${apprenants[i].ville}`)
+            }
+            break;
         case 3:
             console.log("- Ajouter un apprenant");
             ajouterapprenants();
-            break
+            break;
         case 4:
             console.log("- Consulter un apprenant");
             break
         case 5:
             console.log("- Ajouter ou modifier un résultat");
-            break
+            let idRes = parseInt(prompt("enter l'id de l'apprenant: "));
+            let jour = parseInt(prompt("enter le jour enter 1 et 7 :"));
+            let exTermines = parseInt(prompt("enter le nomber d'exercices termine: "));
+            let exTotal = parseInt(prompt("enter le nomber total d'exercices :"));
+            let challenge = prompt("le challenge est termine ? (oui/non) : ");
+            let challengeTermine=(normaliserNom(challenge)==="oui");
+            enregistrerResultat(idRes, jour, exTermines,exTotal,challengeTermine);
+            break;
         case 6:
             console.log("- Rechercher un apprenant");
-            
-            console.log(rechercherApprenant())
+            let recherche =prompt("enter l'id ou nom: ");
+            rechercherApprenant(recherche);
             break
         case 7:
             console.log("- Filtrer par niveau");
+            let niveau=prompt("enter le niveau (exellent/ satisfaisant/insuffisant): ");
+            filtrerParNiveau(niveau);
             break
         case 8:
             console.log("- Trier par progression");
