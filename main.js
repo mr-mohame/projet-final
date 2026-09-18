@@ -65,6 +65,9 @@ function ajouterapprenants(id, nom, ville){
     
 
 }
+
+//function pour enregistrer les resultat
+
 function enregistrerResultat(id, jour, exercicesTermines, totalExercices){
     // verification d'id
     let apprenantTrouve;
@@ -105,10 +108,9 @@ function enregistrerResultat(id, jour, exercicesTermines, totalExercices){
         })
         console.log("jour ajoute");
     }
-
 }
 
- 
+ // function pour calcule la pourcentage de chaque apprenant.
 function calculerProgression(apprenant){
     let totalExercices =0;
     let totalProposes = 0
@@ -119,25 +121,54 @@ function calculerProgression(apprenant){
         let res = apprenant.resultats[i];
         totalExercices += res.exercicesTermines
         totalProposes += res.totalExercices;
-        totalProposes += res.totalExercices;
         if(res.challengeTermine){
             challengecount ++;
         }
     }
-    let progress;
+    let pourcentage;
     if(totalExercices==0){
         progress=0;
     }
-    progress= (totalExercices / totalProposes)*100;// 56.65677899 56.56
-    progress=Number(progress.toFixed(2))
-    return{
-        exercicesTermines : exercicesTermines,
-        totalProposes : totalProposes,
-        challengeTermine : challengeTermine,
-        joursRs : joursRs
+    progress= (totalExercices / totalProposes)*100;
+    pourcentage=Number(pourcentage.toFixed(2))
+
+    let statut ="";
+    if(pourcentage>=80){
+        statu ="Excellent";
+    }else if(pourcentage>=50 && pourcentage<80){
+        statu ="Moyen";
+    }else if(pourcentage<50){
+        statu ="Insuffisant";
     }
+    return{
+        pourcentage : pourcentage,
+        statut : statut
 
+    }
+}
+// function pour rechrche un apprenant par id or par nom 
+function rechrcherApprenant(recherche){
+    let apprenantRecherche= null;
+    for(let i=0; i<apprenants.length; i++){
+        if(recherche==apprenants[i].id || recherche==apprenants[i].nomComplet){
+            apprenantRecherche = apprenants[i]
+            break;
+        }
+    }
+    if(apprenantRecherche === null){
+        console.log("appreant non trouve.")
+        return;
+    }
+    if(apprenantRecherche !== null){
+        console.log(`profil de : ${apprenantRecherche.id}`);
+        console.log(`profil de : ${apprenantRecherche.nomComplet}`);
+        console.log(`profil de : ${apprenantRecherche.ville}`);
 
+        for(let i=0; i<apprenantRecherche.resultats.length; i++){
+            let rech = apprenantRecherche.resultats[i];
+            console.log(`jour : ${rech.jour} : ${rech.exercicesTermines} : ${rech.totalExercices} exercices`)
+        }
+    }
 }
 
 
