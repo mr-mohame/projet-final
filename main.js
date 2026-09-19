@@ -191,7 +191,7 @@ function filtrerParNiveau(niveauRecherche){
         let appreant = apprenants[i];
         let statut = calculerProgression|(appreant);
         if(normaliserNom(statut.statut)=== niveauNom){
-            console.log(`id: ${appreant.id} | nom: ${appreant.nomComplet} | villa: ${appreant.ville} || progression: ${statut.pourcentage}% | statut: ${statut.statut}`);
+            console.log(`id: ${appreant.id} | nom: ${appreant.nomComplet} | villa: ${appreant.ville} || progression: ${pourcentage.pourcentage}% | statut: ${statut.statut}`);
             trouve++;
         }
     }
@@ -200,9 +200,23 @@ function filtrerParNiveau(niveauRecherche){
     }
 
 }
-
-
-// function pour affiche le menu 
+// fonction pour trier Par Progression 
+function trierParProgression(tableau){
+    
+    for(let i=0; i<tableau.length; i++){
+        for(let j=0; j<tableau.length-1-i; j++){
+            let p1= calculerProgression(tableau[j]).pourcentage;
+            let p2= calculerProgression(tableau[j+1]).pourcentage;
+            if(p1<p2){
+                let temp = tableau[j];
+                tableau[j]= tableau[j+1];
+                tableau[j+1]= temp;
+            }
+        }
+    }
+    return tableau;
+}
+//  affiche le menu 
 let choix;
 console.log("=== SAS PROGRESS CONSOLE ===");
 console.log("1. Afficher le tableau de bord");
@@ -219,23 +233,54 @@ do{
     choix = Number(prompt("entre le choix :"));
     switch(choix){
         case 1:
-            console.log("- le tableau de bord");
+            let sommePourcentages = 0;
+            let nbSolide = 0;
+            let nbProgression = 0;
+            let nbRenforcer = 0;
+            console.log("--------- le tableau de bord --------");
+            if(apprenants.length===0){
+                console.log("aucun apprenant trouve");
+            }else{
+                console.log("ID | Nom | Ville | Progression | Statut");
+                console.log("-------------------------");
+                for(let i=0; i<apprenants.length; i++){
+                    let stats = calculerProgression(apprenants[i]);
+                    sommePourcentages += stats.pourcentage;
+                    if(stats.statut === "Excellent"){
+                        nbSolide++;
+                    }else if(stats.statut === "Satisfaisant"){
+                        nbProgression++;
+                    }else{
+                        nbRenforcer++;
+                    }
+                    console.log(`${apprenants[i].id} | ${apprenants[i].nomComplet} | ${apprenants[i].ville} | ${stats.pourcentage} | ${stats.statut}`);
+                }
+            }
+            let MoyenGroupe = (sommePourcentages / apprenants.length).toFixed(2);
+            console.log("---------------------------");
+            console.log(`Nomber total d'apprenants : ${apprenants.length}`);
+            console.log(`progression moyenne de groupe: ${MoyenGroupe}%`);
+            console.log(`++++++ repartition par niveau ++++++ : `);
+            console.log(`* Solide : ${nbSolide}`);
+            console.log(`* en progression : ${nbProgression}`);
+            console.log(`* a renforcer : ${nbRenforcer}`);
+            console.log("---------------------------");
             break;
         case 2:
-            console.log("- Liste des apprenants");
+            console.log("-------- Liste des apprenants --------");
             for(let i=0; i<apprenants.length; i++){
                 console.log(`${apprenants[i].id}. ${apprenants[i].nomComplet}. ${apprenants[i].ville}`)
             }
             break;
         case 3:
-            console.log("- Ajouter un apprenant");
+            console.log("--------- Ajouter un apprenant --------");
             ajouterapprenants();
             break;
         case 4:
-            console.log("- Consulter un apprenant");
+            console.log("--------- Consulter un apprenant --------");
             break
         case 5:
-            console.log("- Ajouter ou modifier un résultat");
+            console.log("--------- Ajouter ou modifier un résultat --------");
             let idRes = parseInt(prompt("enter l'id de l'apprenant: "));
             let jour = parseInt(prompt("enter le jour enter 1 et 7 :"));
             let exTermines = parseInt(prompt("enter le nomber d'exercices termine: "));
@@ -245,26 +290,38 @@ do{
             enregistrerResultat(idRes, jour, exTermines,exTotal,challengeTermine);
             break;
         case 6:
-            console.log("- Rechercher un apprenant");
+            console.log("--------- Rechercher un apprenant --------");
             let recherche =prompt("enter l'id ou nom: ");
             rechercherApprenant(recherche);
             break
         case 7:
-            console.log("- Filtrer par niveau");
-            let niveau=prompt("enter le niveau (exellent/ satisfaisant/insuffisant): ");
+            console.log("--------- Filtrer par niveau --------");
+            let niveau=prompt("enter le niveau (Excellent / Satisfaisant / Insuffisant): ");
             filtrerParNiveau(niveau);
             break
         case 8:
-            console.log("- Trier par progression");
+            console.log("--------- Trier par progression --------");
+            if(apprenants.length===0){
+                console.log("aucun apprenant trouve");
+            }else{
+                let apprenantsTries = trierParProgression(apprenants);
+
+                console.log("ID | Nom | Ville | Progression | Statut");
+                console.log("-------------------------");
+                for(let i=0; i<apprenantsTries.length; i++){
+                    let stats = calculerProgression(apprenants[i]); 
+                    console.log(`${apprenantsTries[i].id} | ${apprenantsTries[i].nomComplet} | ${apprenantsTries[i].ville} | ${stats.pourcentage}% | ${stats.statut}`);
+                }
+            }
             break
         case 9:
-            console.log("- Trier par ordre alphabétique");
+            console.log("--------- Trier par ordre alphabétique --------");
             break
         case 0:
-            console.log("- Quiter");
+            console.log("--------- Quiter --------");
             break
         default:
-            console.log("- le choix invalide");
+            console.log("--------- le choix invalide --------");
             break                                        
     }
 }while(choix!==0)
