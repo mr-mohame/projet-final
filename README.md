@@ -27,16 +27,16 @@ chaque apprenant est stocke sous form d'objet:
 
 
 ## les fonctionnalites disponibles
-1. tableau de bord : affiche le nombre total, la moyenne de la promo et la repartition par niveau.
-2. liste des apprenant : affiche tous les apprenants enrigistres.
-3. Ajouter un apprenant : Pour ajouter un nouveau membre avec son nom et sa ville.
-4. Consulter par ID : Affiche toutes les informations dun seul apprenant.
-5. Modifier les résultats : Pour mettre à jour les validations quotidiennes.
-6. Recherche par nom : Pour trouver un apprenant par son nom.
-7. Filtrer par niveau : Pour afficher seulement un groupe (ex: Solide).
-8. Tri par progression : Tri avec lalgorithme Bubble Sort (du plus grand au plus petit).
-9. Tri alphabétique : Tri A-Z avec Bubble Sort selon le nom.
-0. Quiter : quiter le programme .
+1. *tableau de bord* : affiche le nombre total, la moyenne de la promo et la repartition par niveau.
+2. *liste des apprenant* : affiche tous les apprenants enrigistres.
+3. *Ajouter un apprenant* : Pour ajouter un nouveau membre avec son nom et sa ville.
+4. *Consulter par ID* : Affiche toutes les informations dun seul apprenant.
+5. *Modifier les résultats* : Pour mettre à jour les validations quotidiennes.
+6. *Recherche par nom* : Pour trouver un apprenant par son nom.
+7. *Filtrer par niveau* : Pour afficher seulement un groupe (ex: Solide).
+8. *Tri par progression* : Tri avec lalgorithme Bubble Sort (du plus grand au plus petit).
+9. *Tri alphabétique* : Tri A-Z avec Bubble Sort selon le nom.
+0. *Quiter* : quiter le programme .
 
 ---
 
