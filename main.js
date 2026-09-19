@@ -1,7 +1,5 @@
 const prompt = require('prompt-sync')();
-// Les données de départ
 const apprenants = [
-    //apprenant 1
 { 
     id: 1,
     nomComplet: "Sara Dev",
@@ -13,7 +11,7 @@ const apprenants = [
                 totalExercices: 20, challengeTermine: false }
     ]
 },
-    //apprenant 2
+
 {
     id: 2,
     nomComplet: "Yassine Code", 
@@ -23,7 +21,7 @@ const apprenants = [
                 totalExercices: 20, challengeTermine: false }
     ]
 },
-    //apprenant 3
+
 {
     id: 3,
     nomComplet: "Badr Algo",
@@ -34,14 +32,14 @@ const apprenants = [
     ]
 }
 ];
-// fonction pour normaliser le nom 
+
 function normaliserNom(nom){
     if(!nom) return "";
     return nom.trim().toLowerCase();
 
 }
 
-// fonction pour valide le reseaultat 
+
 function validerResultat(jour, exercicesTermines, totalExercices){
     if(jour<1 || jour>7){
         return false
@@ -55,7 +53,7 @@ function validerResultat(jour, exercicesTermines, totalExercices){
     return true
 } 
   
-// fonction ajouter un apprenant 
+ 
 function ajouterapprenants(id, nom, ville){
     id = parseInt(prompt("Entre l'id :"));
     let existeID= true;
@@ -88,10 +86,10 @@ function ajouterapprenants(id, nom, ville){
 
 }
 
-//function pour enregistrer les resultat
+
 
 function enregistrerResultat(id, jour, exercicesTermines, totalExercices, challengeTermine){
-    // verification d'id
+   
     let apprenantTrouve;
     for(let i=0; i<apprenants.length; i++){
         if(apprenants[i].id === parseInt(id)){
@@ -103,7 +101,7 @@ function enregistrerResultat(id, jour, exercicesTermines, totalExercices, challe
         console.log("apprenant non Trouve");
         return
     }
-    // verification de jour
+    
     let verifieJour= validerResultat(jour, exercicesTermines, totalExercices);
     if(!verifieJour){
         console.log("les donne sont valide");
@@ -134,7 +132,7 @@ function enregistrerResultat(id, jour, exercicesTermines, totalExercices, challe
     }
 }
 
- // function pour calcule la pourcentage de chaque apprenant.
+
 function calculerProgression(apprenant){
     let totalExercices =0;
     let totalProposes = 0;
@@ -148,18 +146,18 @@ function calculerProgression(apprenant){
     }
     
     if(totalExercices===0){
-        return {pourcentage: 0, statut: "Insuffisant"};
+        return {pourcentage: 0, statut: "À renforcer"};
     }
     let pourcentage= (totalExercices / totalProposes)*100;
     pourcentage=Number(pourcentage.toFixed(2))
 
     let statut ="";
     if(pourcentage>=80){
-        statut ="Excellent";
+        statut ="Solide";
     }else if(pourcentage>=50 && pourcentage<80){
-        statut ="Moyen";
+        statut ="En progression";
     }else if(pourcentage<50){
-        statut ="Insuffisant";
+        statut ="À renforcer";
     }
     return{
         pourcentage : pourcentage,
@@ -167,7 +165,7 @@ function calculerProgression(apprenant){
 
     }
 }
-// function pour rechrche un apprenant par id or par nom 
+
 function rechercherApprenant(recherche){
     let apprenantRecherche= null;
     for(let i=0; i<apprenants.length; i++){
@@ -196,7 +194,7 @@ function rechercherApprenant(recherche){
     console.log(`Pourcentage: ${prog.pourcentage}%`);
     console.log(`statut : ${prog.statut}`);
 }
-// fonction pour filter les apprenant par niveau
+
 function filtrerParNiveau(niveauRecherche){
     let trouve = 0;
     let niveauNom = normaliserNom(niveauRecherche);
@@ -215,7 +213,7 @@ function filtrerParNiveau(niveauRecherche){
     }
 
 }
-// fonction pour trier Par Progression 
+
 function trierParProgression(tableau){
     for(let i=0; i<tableau.length; i++){
         for(let j=0; j<tableau.length-1-i; j++){
@@ -230,7 +228,7 @@ function trierParProgression(tableau){
     }
     return tableau;
 }
-// fonction pour trier Par alphabetique 
+
 function  trierParAlphabetique(tableau){
     for(let i=0; i<tableau.length; i++){
         for(let j =0; j<tableau.length-1-i; j++){
@@ -245,7 +243,7 @@ function  trierParAlphabetique(tableau){
     }
     return tableau;
 }
-//  affiche le menu 
+
 let choix;
 console.log("=== SAS PROGRESS CONSOLE ===");
 console.log("1. Afficher le tableau de bord");
@@ -275,9 +273,9 @@ do{
                 for(let i=0; i<apprenants.length; i++){
                     let stats = calculerProgression(apprenants[i]);
                     sommePourcentages += stats.pourcentage;
-                    if(stats.statut === "Excellent"){
+                    if(stats.statut === "Solide"){
                         nbSolide++;
-                    }else if(stats.statut === "Satisfaisant"){
+                    }else if(stats.statut === "En progression"){
                         nbProgression++;
                     }else{
                         nbRenforcer++;
@@ -345,7 +343,7 @@ do{
             break
         case 7:
             console.log("--------- Filtrer par niveau --------");
-            let niveau=prompt("enter le niveau (Excellent / Moyen / Insuffisant): ");
+            let niveau=prompt("enter le niveau (Solide / En progression / À renforcer): ");
             filtrerParNiveau(niveau);
             break
         case 8:
@@ -371,7 +369,7 @@ do{
                 let apprenantsTriesAlpha = trierParAlphabetique(apprenants);
                 console.log("ID | Nom | Ville | Progression | Statut");
                 console.log("-------------------------");
-                //pour print tous les appreants
+                
                 for(let i=0; i<apprenantsTriesAlpha.length; i++){
                     let stats = calculerProgression(apprenantsTriesAlpha[i])
                 console.log(`${apprenantsTriesAlpha[i].id} | ${apprenantsTriesAlpha[i].nomComplet} | ${apprenantsTriesAlpha[i].ville} | ${stats.pourcentage}% | ${stats.statut}`);
