@@ -144,7 +144,7 @@ function calculerProgression(apprenant){
         let res = apprenant.resultats[i];
         totalExercices += res.exercicesTermines
         totalProposes += res.totalExercices;
-        //if(res.challengeTermine){challengecount ++;}
+       
     }
     
     if(totalExercices===0){
@@ -198,12 +198,14 @@ function rechercherApprenant(recherche){
 }
 // fonction pour filter les apprenant par niveau
 function filtrerParNiveau(niveauRecherche){
-    let niveauNom = normaliserNom(niveauRecherche);
     let trouve = 0;
+    let niveauNom = normaliserNom(niveauRecherche);
+
     for(let i=0; i<apprenants.length; i++){
         let appreant = apprenants[i];
         let statut = calculerProgression|(appreant);
-        if(normaliserNom(statut.statut)=== niveauNom){
+
+        if(normaliserNom(stats.statut) === niveauNom){
             console.log(`id: ${appreant.id} | nom: ${appreant.nomComplet} | villa: ${appreant.ville} || progression: ${pourcentage.pourcentage}% | statut: ${statut.statut}`);
             trouve++;
         }
@@ -343,7 +345,7 @@ do{
             break
         case 7:
             console.log("--------- Filtrer par niveau --------");
-            let niveau=prompt("enter le niveau (Excellent / Satisfaisant / Insuffisant): ");
+            let niveau=prompt("enter le niveau (Excellent / Moyen / Insuffisant): ");
             filtrerParNiveau(niveau);
             break
         case 8:
