@@ -1,24 +1,37 @@
 const prompt = require('prompt-sync')();
 // Les données de départ
 const apprenants = [
-{ id: 1,
-  nomComplet: "Sara Dev",
-  ville: "Nador",
-resultats: [
-{ jour: 1, exercicesTermines: 18,
-totalExercices: 20, challengeTermine: true },
-{ jour: 2, exercicesTermines: 14,
-totalExercices: 20, challengeTermine: false }
-]
+    //apprenant 1
+{ 
+    id: 1,
+    nomComplet: "Sara Dev",
+    ville: "Nador",
+    resultats: [
+            { jour: 1, exercicesTermines: 18,
+                totalExercices: 20, challengeTermine: true },
+            { jour: 2, exercicesTermines: 14,
+                totalExercices: 20, challengeTermine: false }
+    ]
 },
+    //apprenant 2
 {
-id: 2,
-nomComplet: "Yassine Code",
-ville: "Oujda",
-resultats: [
-{ jour: 1, exercicesTermines: 12,
-totalExercices: 20, challengeTermine: false }
-]
+    id: 2,
+    nomComplet: "Yassine Code", 
+    ville: "Oujda", 
+    resultats: [
+            { jour: 1, exercicesTermines: 12,
+                totalExercices: 20, challengeTermine: false }
+    ]
+},
+    //apprenant 3
+{
+    id: 3,
+    nomComplet: "Badr Algo",
+    ville: "Tanger",
+    resultats: [
+        { jour: 1, exercicesTermines: 15, 
+            totalExercices: 20, challengeTermine: true }
+    ]
 }
 ];
 // fonction pour normaliser le nom 
@@ -202,12 +215,26 @@ function filtrerParNiveau(niveauRecherche){
 }
 // fonction pour trier Par Progression 
 function trierParProgression(tableau){
-    
     for(let i=0; i<tableau.length; i++){
         for(let j=0; j<tableau.length-1-i; j++){
             let p1= calculerProgression(tableau[j]).pourcentage;
             let p2= calculerProgression(tableau[j+1]).pourcentage;
             if(p1<p2){
+                let temp = tableau[j];
+                tableau[j]= tableau[j+1];
+                tableau[j+1]= temp;
+            }
+        }
+    }
+    return tableau;
+}
+// fonction pour trier Par alphabetique 
+function  trierParAlphabetique(tableau){
+    for(let i=0; i<tableau.length; i++){
+        for(let j =0; j<tableau.length-1-i; j++){
+            let alpha1 = apprenants[j].nomComplet.toLowerCase;
+            let alpha2 = apprenants[j+1].nomComplet.toLowerCase;
+            if(alpha1 > alpha2){
                 let temp = tableau[j];
                 tableau[j]= tableau[j+1];
                 tableau[j+1]= temp;
@@ -316,6 +343,18 @@ do{
             break
         case 9:
             console.log("--------- Trier par ordre alphabétique --------");
+            if(apprenants.length === 0){
+                console.log("aucun apprenant trouve.")
+            }else {
+                let apprenantsTriesAlpha = trierParAlphabetique(apprenants);
+                console.log("ID | Nom | Ville | Progression | Statut");
+                console.log("-------------------------");
+                //pour print tous les appreants
+                for(let i=0; i<apprenantsTriesAlpha.length; i++){
+                    let stats = calculerProgression(apprenantsTriesAlpha[i])
+                console.log(`${apprenantsTriesAlpha[i].id} | ${apprenantsTriesAlpha[i].nomComplet} | ${apprenantsTriesAlpha[i].ville} | ${stats.pourcentage}% | ${stats.statut}`);
+                }
+            }
             break
         case 0:
             console.log("--------- Quiter --------");
