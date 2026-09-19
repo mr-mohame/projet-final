@@ -24,6 +24,7 @@ chaque apprenant est stocke sous form d'objet:
                 totalExercices: 20, challengeTermine: false }
     ]
 }
+```
 
 
 ## les fonctionnalites disponibles
@@ -44,7 +45,8 @@ chaque apprenant est stocke sous form d'objet:
 1. ouvrir le terminal dans le dossier de projet 
 2. executer la commande: 
 ```bash
-node main.js ```
+node main.js 
+```
 
 ---
 
