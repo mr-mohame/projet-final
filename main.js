@@ -232,8 +232,8 @@ function trierParProgression(tableau){
 function  trierParAlphabetique(tableau){
     for(let i=0; i<tableau.length; i++){
         for(let j =0; j<tableau.length-1-i; j++){
-            let alpha1 = apprenants[j].nomComplet.toLowerCase;
-            let alpha2 = apprenants[j+1].nomComplet.toLowerCase;
+            let alpha1 = apprenants[j].nomComplet.toLowerCase();
+            let alpha2 = apprenants[j+1].nomComplet.toLowerCase();
             if(alpha1 > alpha2){
                 let temp = tableau[j];
                 tableau[j]= tableau[j+1];
@@ -305,6 +305,26 @@ do{
             break;
         case 4:
             console.log("--------- Consulter un apprenant --------");
+            let idConsulter = parseInt(prompt("enter l'id consulter : "));
+            let trouve = false;
+            for(let i=0; i<apprenants.length; i++){
+                if(apprenants[i].id=== idConsulter){
+                    let prog = calculerProgression(apprenants[i]);
+
+                    console.log("===== fiche apprenant =====");
+                    console.log(`ID : ${apprenants[i].id}`);
+                    console.log(`nomComplet : ${normaliserNom(apprenants[i].nomComplet)}`);
+                    console.log(`ville : ${apprenants[i].ville}`);
+                    console.log(`progression : ${prog.pourcentage}%`);
+                    console.log(`statut : ${prog.statut}`);
+                    
+                    trouve = true;
+                    break;
+                }
+            }
+            if(!trouve){
+                console.log(`aucun apprenant trouve avec l'id ${idConsulter}`);
+            }
             break
         case 5:
             console.log("--------- Ajouter ou modifier un résultat --------");
