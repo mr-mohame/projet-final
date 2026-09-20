@@ -39,11 +39,13 @@ const apprenants = [
     ]
 }
 ];
+
 function normaliserNom(nom){
     if(!nom) return "";
     return nom.trim().toLowerCase();
 
 }
+
 function validerResultat(jour, exercicesTermines, totalExercices){
     if(jour<1 || jour>7){
         return false
@@ -56,20 +58,32 @@ function validerResultat(jour, exercicesTermines, totalExercices){
     }
     return true
 } 
+
+function trouverApprenantParId(id){
+    for(let i=0; i<apprenants.length; i++){
+        if(apprenants[i].id===parseInt(id)){
+            return apprenants[i];
+        }
+    }
+    return null;
+}
+
+function estExisteID(id){
+    return trouverApprenantParId(id) !== null; 
+}
+
+function AfficherTableauApprenants(liste){
+    console.log("ID | Nom | Ville | Progression | Statut");
+    for(let i=0; i<liste.length; i++){
+        let stats = calculerProgression(liste[i]);
+        console.log(`${liste[i].id} | ${liste[i].nomComplet} | ${liste[i].ville} | ${stats.pourcentage}% | ${stats.statut}`);
+    }
+}
+
 function ajouterapprenants(id, nom, ville){
     id = parseInt(prompt("Entre l'id :"));
-    let existeID= true;
-    while(existeID || isNaN(id)){
-        existeID = false;
-        for(let i=0; i<apprenants.length; i++){
-            if(apprenants[i].id===id){
-                existeID =true;
-                break;
-            }
-        }
-        if(existeID || isNaN(id)){
-            id = parseInt(prompt("erreur : id existe deja , enter un nouveau id :  "));
-        }
+    while(estExisteID(id) || isNaN(id)){
+        id = parseInt(prompt("erreur : id existe deja , enter un nouveau id :  "));  
     }
     nom = prompt("Entre le nom complet :");
     ville = prompt("Entre la ville :");
@@ -84,14 +98,10 @@ function ajouterapprenants(id, nom, ville){
     console.log("apprenant ajoute avec succes.");
     return nouvelApprenant
 }
+
 function enregistrerResultat(id, jour, exercicesTermines, totalExercices, challengeTermine){
-    let apprenantTrouve;
-    for(let i=0; i<apprenants.length; i++){
-        if(apprenants[i].id === parseInt(id)){
-            apprenantTrouve = apprenants[i]
-            break;
-        }
-    }
+    let apprenantTrouve= trouverApprenantParId(id);
+
     if(!apprenantTrouve){
         console.log("apprenant non Trouve");
         return
@@ -100,8 +110,7 @@ function enregistrerResultat(id, jour, exercicesTermines, totalExercices, challe
     let verifieJour= validerResultat(jour, exercicesTermines, totalExercices);
     if(!verifieJour){
         console.log("les donnee saisies sont valide");
-        return
-        
+        return  
     }
     let resultatJour = null;
     for(let i=0; i<apprenantTrouve.resultats.length; i++){
@@ -126,6 +135,7 @@ function enregistrerResultat(id, jour, exercicesTermines, totalExercices, challe
         console.log("jour ajoute");
     }
 }
+
 function calculerProgression(apprenant){
     let totalExercices =0;
     let totalProposes = 0;
@@ -157,10 +167,12 @@ function calculerProgression(apprenant){
 
     }
 }
+
 function rechercherApprenant(recherche){
     let apprenantRecherche= null;
+    let rechercheNom= normaliserNom(recherche);
     for(let i=0; i<apprenants.length; i++){
-        if(apprenants[i].id===parseInt(recherche) || apprenants[i].nomComplet.includes(normaliserNom(recherche))){
+        if(apprenants[i].id===parseInt(recherche) || normaliserNom(apprenants[i].nomComplet).includes(normaliserNom(rechercheNom))){
             apprenantRecherche = apprenants[i]
             break;
         }
@@ -185,6 +197,7 @@ function rechercherApprenant(recherche){
     console.log(`Pourcentage: ${prog.pourcentage}%`);
     console.log(`statut : ${prog.statut}`);
 }
+
 function filtrerParNiveau(niveauRecherche){
     let trouve = 0;
     let niveauNom = normaliserNom(niveauRecherche);
@@ -203,6 +216,7 @@ function filtrerParNiveau(niveauRecherche){
     }
 
 }
+
 function trierParProgression(tableau){
     for(let i=0; i<tableau.length; i++){
         for(let j=0; j<tableau.length-1-i; j++){
@@ -217,6 +231,7 @@ function trierParProgression(tableau){
     }
     return tableau;
 }
+
 function  trierParAlphabetique(tableau){
     for(let i=0; i<tableau.length; i++){
         for(let j =0; j<tableau.length-1-i; j++){
@@ -231,6 +246,7 @@ function  trierParAlphabetique(tableau){
     }
     return tableau;
 }
+
 let choix;
 console.log("=== SAS PROGRESS CONSOLE ===");
 console.log("1. Afficher le tableau de bord");
@@ -255,8 +271,7 @@ do{
             if(apprenants.length===0){
                 console.log("aucun apprenant trouve");
             }else{
-                console.log("ID | Nom | Ville | Progression | Statut");
-                console.log("-------------------------");
+                AfficherTableauApprenants(apprenants);
                 for(let i=0; i<apprenants.length; i++){
                     let stats = calculerProgression(apprenants[i]);
                     sommePourcentages += stats.pourcentage;
@@ -267,7 +282,6 @@ do{
                     }else{
                         nbRenforcer++;
                     }
-                    console.log(`${apprenants[i].id} | ${apprenants[i].nomComplet} | ${apprenants[i].ville} | ${stats.pourcentage} | ${stats.statut}`);
                 }
             }
             let MoyenGroupe = (sommePourcentages / apprenants.length).toFixed(2);
@@ -293,23 +307,16 @@ do{
         case 4:
             console.log("--------- Consulter un apprenant --------");
             let idConsulter = parseInt(prompt("enter l'id consulter : "));
-            let trouve = false;
-            for(let i=0; i<apprenants.length; i++){
-                if(apprenants[i].id=== idConsulter){
-                    let prog = calculerProgression(apprenants[i]);
-
-                    console.log("===== fiche apprenant =====");
-                    console.log(`ID : ${apprenants[i].id}`);
-                    console.log(`nomComplet : ${normaliserNom(apprenants[i].nomComplet)}`);
-                    console.log(`ville : ${apprenants[i].ville}`);
-                    console.log(`progression : ${prog.pourcentage}%`);
-                    console.log(`statut : ${prog.statut}`);
-                    
-                    trouve = true;
-                    break;
-                }
-            }
-            if(!trouve){
+            let appreantConsulter = trouverApprenantParId(idConsulter);
+            if(appreantConsulter){
+                let prog = calculerProgression(appreantConsulter);
+                console.log("===== fiche apprenant =====");
+                console.log(`ID : ${appreantConsulter.id}`);
+                console.log(`nomComplet : ${normaliserNom(appreantConsulter.nomComplet)}`);
+                console.log(`ville : ${appreantConsulter.ville}`);
+                console.log(`progression : ${prog.pourcentage}%`);
+                console.log(`statut : ${prog.statut}`);  
+            }else{
                 console.log(`aucun apprenant trouve avec l'id ${idConsulter}`);
             }
             break
@@ -339,13 +346,7 @@ do{
                 console.log("aucun apprenant trouve");
             }else{
                 let apprenantsTries = trierParProgression(apprenants);
-
-                console.log("ID | Nom | Ville | Progression | Statut");
-                console.log("-------------------------");
-                for(let i=0; i<apprenantsTries.length; i++){
-                    let stats = calculerProgression(apprenantsTries[i]); 
-                    console.log(`${apprenantsTries[i].id} | ${apprenantsTries[i].nomComplet} | ${apprenantsTries[i].ville} | ${stats.pourcentage}% | ${stats.statut}`);
-                }
+                AfficherTableauApprenants(apprenantsTries);
             }
             break
         case 9:
@@ -354,13 +355,7 @@ do{
                 console.log("aucun apprenant trouve.")
             }else {
                 let apprenantsTriesAlpha = trierParAlphabetique(apprenants);
-                console.log("ID | Nom | Ville | Progression | Statut");
-                console.log("-------------------------");
-                
-                for(let i=0; i<apprenantsTriesAlpha.length; i++){
-                    let stats = calculerProgression(apprenantsTriesAlpha[i])
-                console.log(`${apprenantsTriesAlpha[i].id} | ${apprenantsTriesAlpha[i].nomComplet} | ${apprenantsTriesAlpha[i].ville} | ${stats.pourcentage}% | ${stats.statut}`);
-                }
+                AfficherTableauApprenants(apprenantsTriesAlpha)
             }
             break
         case 0:
@@ -370,4 +365,4 @@ do{
             console.log("--------- le choix invalide --------");
             break                                        
     }
-}while(choix!==0)
+}while(choix!==0);
