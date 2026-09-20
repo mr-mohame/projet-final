@@ -28,7 +28,7 @@ const apprenants = [
         { jour: 1, exercicesTermines: 15, 
             totalExercices: 20, challengeTermine: true }
     ]
-}
+},
 {
     id: 4,
     nomComplet: "amine js",
