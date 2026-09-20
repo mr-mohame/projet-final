@@ -140,9 +140,8 @@ function calculerProgression(apprenant){
 
     for(let i=0; i<joursRs; i++){
         let res = apprenant.resultats[i];
-        totalExercices += res.exercicesTermines
-        totalProposes += res.totalExercices;
-       
+        totalExercices += res.exercicesTermines;
+        totalProposes += res.totalExercices;   
     }
     
     if(totalExercices===0){
@@ -201,10 +200,10 @@ function filtrerParNiveau(niveauRecherche){
 
     for(let i=0; i<apprenants.length; i++){
         let appreant = apprenants[i];
-        let statut = calculerProgression|(appreant);
+        let statut = calculerProgression(appreant);
 
-        if(normaliserNom(stats.statut) === niveauNom){
-            console.log(`id: ${appreant.id} | nom: ${appreant.nomComplet} | villa: ${appreant.ville} || progression: ${pourcentage.pourcentage}% | statut: ${statut.statut}`);
+        if(normaliserNom(statut.statut) === niveauNom){
+            console.log(`id: ${appreant.id} | nom: ${appreant.nomComplet} | villa: ${appreant.ville} || progression: ${statut.pourcentage}% | statut: ${statut.statut}`);
             trouve++;
         }
     }
