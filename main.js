@@ -11,7 +11,6 @@ const apprenants = [
                 totalExercices: 20, challengeTermine: false }
     ]
 },
-
 {
     id: 2,
     nomComplet: "Yassine Code", 
@@ -21,7 +20,6 @@ const apprenants = [
                 totalExercices: 20, challengeTermine: false }
     ]
 },
-
 {
     id: 3,
     nomComplet: "Badr Algo",
@@ -31,15 +29,21 @@ const apprenants = [
             totalExercices: 20, challengeTermine: true }
     ]
 }
+{
+    id: 4,
+    nomComplet: "amine js",
+    ville: "fes",
+    resultats: [
+        { jour: 1, exercicesTermines: 10, 
+            totalExercices: 20, challengeTermine: true }
+    ]
+}
 ];
-
 function normaliserNom(nom){
     if(!nom) return "";
     return nom.trim().toLowerCase();
 
 }
-
-
 function validerResultat(jour, exercicesTermines, totalExercices){
     if(jour<1 || jour>7){
         return false
@@ -52,8 +56,6 @@ function validerResultat(jour, exercicesTermines, totalExercices){
     }
     return true
 } 
-  
- 
 function ajouterapprenants(id, nom, ville){
     id = parseInt(prompt("Entre l'id :"));
     let existeID= true;
@@ -69,7 +71,6 @@ function ajouterapprenants(id, nom, ville){
             id = parseInt(prompt("erreur : id existe deja , enter un nouveau id :  "));
         }
     }
-     
     nom = prompt("Entre le nom complet :");
     ville = prompt("Entre la ville :");
 
@@ -82,12 +83,7 @@ function ajouterapprenants(id, nom, ville){
     apprenants.push(nouvelApprenant);
     console.log("apprenant ajoute avec succes.");
     return nouvelApprenant
-    
-
 }
-
-
-
 function enregistrerResultat(id, jour, exercicesTermines, totalExercices, challengeTermine){
    
     let apprenantTrouve;
@@ -131,8 +127,6 @@ function enregistrerResultat(id, jour, exercicesTermines, totalExercices, challe
         console.log("jour ajoute");
     }
 }
-
-
 function calculerProgression(apprenant){
     let totalExercices =0;
     let totalProposes = 0;
@@ -164,7 +158,6 @@ function calculerProgression(apprenant){
 
     }
 }
-
 function rechercherApprenant(recherche){
     let apprenantRecherche= null;
     for(let i=0; i<apprenants.length; i++){
@@ -193,7 +186,6 @@ function rechercherApprenant(recherche){
     console.log(`Pourcentage: ${prog.pourcentage}%`);
     console.log(`statut : ${prog.statut}`);
 }
-
 function filtrerParNiveau(niveauRecherche){
     let trouve = 0;
     let niveauNom = normaliserNom(niveauRecherche);
@@ -212,7 +204,6 @@ function filtrerParNiveau(niveauRecherche){
     }
 
 }
-
 function trierParProgression(tableau){
     for(let i=0; i<tableau.length; i++){
         for(let j=0; j<tableau.length-1-i; j++){
@@ -227,7 +218,6 @@ function trierParProgression(tableau){
     }
     return tableau;
 }
-
 function  trierParAlphabetique(tableau){
     for(let i=0; i<tableau.length; i++){
         for(let j =0; j<tableau.length-1-i; j++){
@@ -242,7 +232,6 @@ function  trierParAlphabetique(tableau){
     }
     return tableau;
 }
-
 let choix;
 console.log("=== SAS PROGRESS CONSOLE ===");
 console.log("1. Afficher le tableau de bord");
@@ -383,9 +372,3 @@ do{
             break                                        
     }
 }while(choix!==0)
-
-
-    
-        
-
-
