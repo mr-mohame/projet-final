@@ -85,7 +85,6 @@ function ajouterapprenants(id, nom, ville){
     return nouvelApprenant
 }
 function enregistrerResultat(id, jour, exercicesTermines, totalExercices, challengeTermine){
-   
     let apprenantTrouve;
     for(let i=0; i<apprenants.length; i++){
         if(apprenants[i].id === parseInt(id)){
@@ -100,7 +99,7 @@ function enregistrerResultat(id, jour, exercicesTermines, totalExercices, challe
     
     let verifieJour= validerResultat(jour, exercicesTermines, totalExercices);
     if(!verifieJour){
-        console.log("les donne sont valide");
+        console.log("les donnee saisies sont valide");
         return
         
     }
@@ -138,7 +137,7 @@ function calculerProgression(apprenant){
         totalProposes += res.totalExercices;   
     }
     
-    if(totalExercices===0){
+    if(totalProposes===0){
         return {pourcentage: 0, statut: "À renforcer"};
     }
     let pourcentage= (totalExercices / totalProposes)*100;
@@ -221,8 +220,8 @@ function trierParProgression(tableau){
 function  trierParAlphabetique(tableau){
     for(let i=0; i<tableau.length; i++){
         for(let j =0; j<tableau.length-1-i; j++){
-            let alpha1 = apprenants[j].nomComplet.toLowerCase();
-            let alpha2 = apprenants[j+1].nomComplet.toLowerCase();
+            let alpha1 = tableau[j].nomComplet.toLowerCase();
+            let alpha2 = tableau[j+1].nomComplet.toLowerCase();
             if(alpha1 > alpha2){
                 let temp = tableau[j];
                 tableau[j]= tableau[j+1];
@@ -344,7 +343,7 @@ do{
                 console.log("ID | Nom | Ville | Progression | Statut");
                 console.log("-------------------------");
                 for(let i=0; i<apprenantsTries.length; i++){
-                    let stats = calculerProgression(apprenants[i]); 
+                    let stats = calculerProgression(apprenantsTries[i]); 
                     console.log(`${apprenantsTries[i].id} | ${apprenantsTries[i].nomComplet} | ${apprenantsTries[i].ville} | ${stats.pourcentage}% | ${stats.statut}`);
                 }
             }
