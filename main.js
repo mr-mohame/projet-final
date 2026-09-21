@@ -31,7 +31,7 @@ const apprenants = [
 },
 {
     id: 4,
-    nomComplet: "amine js",
+    nomComplet: "Amine js",
     ville: "fes",
     resultats: [
         { jour: 1, exercicesTermines: 10, 
@@ -42,7 +42,15 @@ const apprenants = [
 
 function normaliserNom(nom){
     if(!nom) return "";
-    return nom.trim().toLowerCase();
+    let mots = nom.toLowerCase().split(' ');
+    let res = [];
+    for(let i=0; i<mots.length;i++){
+        if(mots[i]!==""){
+            let motsNormalise = mots[i][0].toUpperCase()+mots[i].slice(1);
+            res.push(motsNormalise);
+        }
+    } 
+    return res.join(' ');
 
 }
 
